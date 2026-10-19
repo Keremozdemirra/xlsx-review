@@ -1,4 +1,4 @@
-"""The plugin, the MCP registry entry and the packaging agree with each other and with the code."""
+"""The plugin and the packaging agree with each other and with the code."""
 import json
 import re
 import sys
@@ -16,8 +16,6 @@ class Packaging(Case):
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         self.assertIn(f'version = "{xr.VERSION}"', pyproject)
         self.assertEqual(self.load(".claude-plugin/plugin.json")["version"], xr.VERSION)
-        server = self.load("server.json")
-        self.assertEqual((server["version"], server["packages"][0]["version"]), (xr.VERSION, xr.VERSION))
 
     def test_manifest_and_marketplace_agree(self):
         plugin = self.load(".claude-plugin/plugin.json")
@@ -39,11 +37,6 @@ class Packaging(Case):
         self.assertIn(rule + " diff", text)  # the pre-approved command is the one the skill runs
         for rel in re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/([\w./-]+)", text):
             self.assertTrue((ROOT / rel).is_file(), rel)
-
-    def test_registry_name_is_in_the_readme(self):
-        name = self.load("server.json")["name"]
-        self.assertIn(f"<!-- mcp-name: {name} -->", (ROOT / "README.md").read_text(encoding="utf-8"))
-        self.assertLess(len(self.load("server.json")["description"]), 100)
 
     def test_module_names_are_prefixed(self):
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")

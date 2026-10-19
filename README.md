@@ -2,8 +2,6 @@
 
 **A pull-request-style review for spreadsheets: what changed in an Excel workbook at formula level, and which of those edits usually break models.**
 
-<!-- mcp-name: io.github.Keremozdemirra/xlsx-review -->
-
 ## Why
 
 When an agent (Claude for Excel, a Python script) or a colleague changes a workbook, there is no
@@ -110,17 +108,21 @@ text diff would show nothing.
 
 Standard library only, Python 3.9 or later.
 
+It is not on PyPI; install it from GitHub, pinned to the `v0.1.0` tag (drop `@v0.1.0` for the
+newest commit on `main`):
+
 ```bash
-uvx xlsx-review@0.1.0 diff before.xlsx after.xlsx
-pipx run --spec xlsx-review==0.1.0 xlsx-review check model.xlsx
+uvx --from git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0 xlsx-review diff before.xlsx after.xlsx
+pipx install git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0    # then: xlsx-review check model.xlsx
+pip install git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0
 ```
 
-`uvx` keeps the version it downloaded in its cache; pin the version as above to know which one runs.
+From a checkout: `git clone https://github.com/Keremozdemirra/xlsx-review && python3 xlsx-review/xlsx_review.py check model.xlsx`.
 
 ### MCP server (Claude Code, Claude Desktop, Cursor)
 
 ```bash
-claude mcp add xlsx-review -- uvx xlsx-review@0.1.0 mcp
+claude mcp add xlsx-review -- uvx --from git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0 xlsx-review mcp
 ```
 
 Tools:
@@ -166,7 +168,7 @@ In CI, fail a pull request that breaks a committed model:
 
 ```bash
 git show origin/main:model.xlsx > /tmp/model.base.xlsx
-uvx xlsx-review@0.1.0 diff /tmp/model.base.xlsx model.xlsx --strict --markdown
+uvx --from git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0 xlsx-review diff /tmp/model.base.xlsx model.xlsx --strict --markdown
 ```
 
 ### What it reports

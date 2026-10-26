@@ -194,7 +194,7 @@ uvx --from git+https://github.com/Keremozdemirra/xlsx-review@v0.1.0 xlsx-review 
 
 ## git diff for workbooks
 
-`textconv` prints one line per cell (formulas, not their results), sheets in workbook order:
+`textconv` prints one line per cell (formulas as written), sheets in workbook order:
 
 ```
 $ xlsx-review textconv tests/fixtures/excel_shared_formulas.xlsx
